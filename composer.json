@@ -1,0 +1,32 @@
+{
+	"name"       :"happydemon/elements",
+	"type"       :"kohana-module",
+	"description":"A Kohana module to help with building HTML navigation menus and breadcrumbs",
+	"keywords"   :["kohana", "menu", "navigation", "kohana module", "breadcrumb", "bootstrap"],
+	"homepage"   :"https://github.com/happyDemon/elements",
+	"license"    :"MIT",
+	"authors"    :[
+		{
+			"name"    :"Bastian Bräu",
+			"email"   :"mail@bftmedia.de",
+			"homepage":"http://bftmedia.de",
+			"role"    :"Developer"
+		},
+		{
+			"name"    :"Ando Roots",
+			"email"   :"ando@sqroot.eu",
+			"homepage":"http://sqroot.eu",
+			"role"    :"Developer"
+		},
+		{
+			"name"    :"Maxim Kerstens",
+			"email"   :"admin@happydemon.org",
+			"homepage":"http://happydemon.org",
+			"role"    :"Developer"
+		}
+	],
+	"require"    :{
+		"php"                :">=5.4.0",
+		"composer/installers":"*"
+	}
+}
