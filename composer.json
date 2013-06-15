@@ -26,7 +26,7 @@
 		}
 	],
 	"require"    :{
-		"php"                :">=5.4.0",
-		"composer/installers":"*"
+		"php"                   :">=5.4.0",
+		"composer/installers"   : "*"
 	}
 }

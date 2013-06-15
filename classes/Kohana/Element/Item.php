@@ -3,24 +3,20 @@
  * Represents a single element item (typically a link) in the Element.
  *
  * @license http://www.opensource.org/licenses/mit-license.php MIT
- * @author Ando Roots <ando@sqroot.eu>
- * @since 2.0
+ * @author Ando Roots <ando@sqroot.eu>, Maxim Kerstens <admin@happydemon.org>
  * @package hD/elements
  * @copyright (c) 2012, Ando Roots
- * @property string classes
  */
 class Kohana_Element_Item
 {
 
 	/**
 	 * @var array Current item config
-	 * @since 2.0
 	 */
 	private $_config = [];
 
 	/**
 	 * @var Element Reference to the items parent element
-	 * @since 2.0
 	 */
 	private $_element;
 
@@ -28,7 +24,6 @@ class Kohana_Element_Item
 	 * @param array $item_config Element item config
 	 * @param \Element $element The Element where this item belongs
 	 * @param int   $index contains the current item's index
-	 * @since 2.0
 	 */
 	public function __construct(array $item_config, Element $element, $index)
 	{
@@ -67,7 +62,6 @@ class Kohana_Element_Item
 
 	/**
 	 * @return string HTML anchor
-	 * @since 2.0
 	 */
 	public function __toString()
 	{
@@ -108,7 +102,6 @@ class Kohana_Element_Item
 	/**
 	 * Add a CSS class to the current item
 	 *
-	 * @since 2.0
 	 * @param string $class
 	 * @return Kohana_Element_Item
 	 */
@@ -123,7 +116,6 @@ class Kohana_Element_Item
 	/**
 	 * Remove a CSS class from the current Element item
 	 *
-	 * @since 2.0
 	 * @param string $class
 	 * @return Kohana_Element_Item
 	 */
@@ -141,7 +133,6 @@ class Kohana_Element_Item
 	 * Use case example: can be used to hide the admin link from unauthorized users.
 	 *
 	 * @return bool True if the item is visible
-	 * @since 2.1
 	 */
 	public function is_visible()
 	{
@@ -151,7 +142,6 @@ class Kohana_Element_Item
 	/**
 	 * Access Element item config
 	 *
-	 * @since 2.0
 	 * @param string $name
 	 * @return mixed
 	 */
@@ -173,7 +163,6 @@ class Kohana_Element_Item
 
 	/**
 	 * @return string HTML for the link icon
-	 * @since 2.1
 	 */
 	private function _render_icon()
 	{
@@ -182,7 +171,6 @@ class Kohana_Element_Item
 
 	/**
 	 * @return array
-	 * @since 2.1
 	 */
 	public static function get_default_config()
 	{
@@ -201,7 +189,6 @@ class Kohana_Element_Item
 	 * Get classes applied to this item.
 	 * This includes the active class (if present) and additional classes set by the user
 	 *
-	 * @since 3.0.1
 	 * @return string Space-separated list of CSS classes
 	 */
 	public function get_classes()

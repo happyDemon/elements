@@ -152,6 +152,8 @@ class Kohana_Element
 	}
 
 	/**
+	 * Set the title of the last value of a breadcrumb element
+	 *
 	 * @param $value string The value of the last item when rendering in breadcrumb
 	 * @return Kohana_Element
 	 */
@@ -176,7 +178,6 @@ class Kohana_Element
 	 * Get only visible Element items
 	 *
 	 * @return array
-	 * @since 3.0
 	 */
 	public function get_visible_items()
 	{
@@ -199,7 +200,6 @@ class Kohana_Element
 	/**
 	 * Set the currently active Element item (by applying the `active_item_class` CSS class)
 	 *
-	 * @since 2.0
 	 * @param int|string $id The ID of the Element (numerical array ID from the config file) or route of a Element item
 	 * @return Element_Item|bool The active Element item or FALSE when item not found
 	 */
@@ -219,7 +219,6 @@ class Kohana_Element
 	/**
 	 * Access Element config properties
 	 *
-	 * @since 2.0
 	 * @param string $name Name of a Element config property
 	 * @return mixed
 	 */
@@ -234,7 +233,6 @@ class Kohana_Element
 	/**
 	 * Get an instance of Element_Item based on its ID
 	 *
-	 * @since 2.1.1
 	 * @param int|string $id Item ID or route name
 	 * @return bool|Element_Item
 	 */
@@ -249,6 +247,7 @@ class Kohana_Element
 			return $this->_items[$id];
 		} else { // By route
 			$path = $this->get_tree_index(Request::current()->route());
+
 			if($path != false) {
 				$levels = count($path);
 
@@ -267,6 +266,12 @@ class Kohana_Element
 		return FALSE;
 	}
 
+	/**
+	 * Return an array to traverse to possibly get sibling items based on a given route
+	 *
+	 * @param Route $route
+	 * @return array|bool
+	 */
 	public function get_tree_index(Route $route)
 	{
 		$name = Route::name($route);
@@ -279,7 +284,6 @@ class Kohana_Element
 
 	/**
 	 * @return array Default configuration for the Element
-	 * @since 3.0
 	 */
 	public static function get_default_config()
 	{

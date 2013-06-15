@@ -4,10 +4,8 @@
  *
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @author Maxim Kerstens <admin@happydemon.org>
- * @since 4.0
  * @package hD/elements
  * @copyright (c) 2013, happyDemon
- * @property string classes
  */
 abstract class Kohana_Element_Render
 {
@@ -18,6 +16,7 @@ abstract class Kohana_Element_Render
 
 		return new $driver($element, $tpl);
 	}
+
 	/**
 	 * @var View filename to use when auto-detect fails
 	 */
