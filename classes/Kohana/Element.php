@@ -51,7 +51,7 @@ class Kohana_Element
 	 */
 	public function __construct(array $config)
 	{
-		$element_items = [];
+		$element_items = array();
 		if (array_key_exists('items', $config)) {
 			$element_items = $config['items'];
 
@@ -182,7 +182,7 @@ class Kohana_Element
 	public function get_visible_items()
 	{
 		if ($this->_items === NULL) {
-			return [];
+			return array();
 		}
 
 		$visible_items = [];

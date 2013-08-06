@@ -13,7 +13,7 @@ class Kohana_Element_Item
 	/**
 	 * @var array Current item config
 	 */
-	private $_config = [];
+	private $_config = array();
 
 	/**
 	 * @var Element Reference to the items parent element
@@ -74,9 +74,9 @@ class Kohana_Element_Item
 			return HTML::anchor(
 				$this->_config['url'],
 				$this->_config['title'],
-				[
+				array(
 					'title' => $this->_config['tooltip']
-				],
+				),
 				NULL,
 				FALSE
 			);
@@ -175,9 +175,9 @@ class Kohana_Element_Item
 	public static function get_default_config()
 	{
 		return [
-			'classes'  => [], // Extra classes for this Element item
+			'classes'  => array(), // Extra classes for this Element item
 			'icon'     => NULL, // Icon class for this Element item
-			'siblings' => [], // Sub-links
+			'siblings' => array(), // Sub-links
 			'title'    => NULL, // Visible text
 			'tooltip'  => NULL, // Tooltip text for this Element item
 			'url'      => '#', // Relative or absolute target for this Element item (href)
