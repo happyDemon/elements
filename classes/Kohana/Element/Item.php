@@ -45,7 +45,7 @@ class Kohana_Element_Item
 		// Apply URL::site
 		if(isset($this->_config['route'])) {
 			$route_params = (isset($this->_config['param'])) ? $this->_config['param'] : array();
-			$this->_config['url'] = URL::site(Route::get($this->_config['route'])->uri($route_params));
+			$this->_config['url'] = URL::site(Route::get($this->_config['route'])->uri($route_params), true);
 			$this->_element->routes[$this->_config['route']] = $index;
 		}
 		else if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8)) {
