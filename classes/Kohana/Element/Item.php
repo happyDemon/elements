@@ -13,19 +13,24 @@ class Kohana_Element_Item
 	/**
 	 * @var array Current item config
 	 */
-	private $_config = array();
+	protected  $_config = array();
 
 	/**
 	 * @var Element Reference to the items parent element
 	 */
-	private $_element;
+	protected $_element;
+
+	/**
+	 * @var Element_item|null Parent item of this one
+	 */
+	protected $_parent_item = null;
 
 	/**
 	 * @param array $item_config Element item config
 	 * @param \Element $element The Element where this item belongs
 	 * @param int   $index contains the current item's index
 	 */
-	public function __construct(array $item_config, Element $element, $index)
+	public function __construct(array $item_config, Element $element, $index, $parent_item=false)
 	{
 		$this->_config = self::get_default_config();
 		$this->_element = $element;
@@ -36,6 +41,11 @@ class Kohana_Element_Item
 		// Translate visible strings
 		$this->_config['title'] = __($this->_config['title']);
 		$this->_config['tooltip'] = __($this->_config['tooltip']);
+
+		//set the parent item
+		if($parent_item != false) {
+			$this->_parent_item = $parent_item;
+		}
 
 		// Add icon to the title
 		if (! empty($this->_config['icon'])) {
@@ -55,7 +65,7 @@ class Kohana_Element_Item
 		// Sub-Element
 		if (array_key_exists('items', $item_config) && count($item_config['items']) > 0) {
 			foreach ($item_config['items'] as $key => $sibling) {
-				$this->_config['siblings'][$key] = new Element_Item($sibling, $element, $index.'.'.$key);
+				$this->_config['siblings'][$key] = new Element_Item($sibling, $element, $index.'.'.$key, $this);
 			}
 		}
 	}
@@ -97,6 +107,16 @@ class Kohana_Element_Item
 	public function has_link()
 	{
 		return ($this->_config['url'] != '#');
+	}
+
+	public function set_active($class, $recursive=false) {
+		$this->add_class($class);
+
+		if($recursive == true && $this->_parent_item != null) {
+			$this->_parent_item->set_active($class, true);
+		}
+
+		return $this;
 	}
 
 	/**

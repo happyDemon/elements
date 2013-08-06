@@ -129,13 +129,14 @@ class Kohana_Element
 	 * Render the Element into HTML
 	 *
 	 * @since 2.0
+	 * @param boolean $recursive Should parent items also be set active?
 	 * @return string the rendered view
 	 */
-	public function render($driver='Menu', $tpl=null)
+	public function render($driver='Menu', $tpl=null, $active_recursive=false)
 	{
 		// Try to guess the current active Element item
 		if ($this->_active_item_index === NULL) {
-			$this->set_current(Route::name(Request::current()->route()));
+			$this->set_current(Route::name(Request::current()->route()), $active_recursive);
 		}
 
 		return Kohana_Element_Render::factory($driver, $this, $tpl)->render();
@@ -201,9 +202,10 @@ class Kohana_Element
 	 * Set the currently active Element item (by applying the `active_item_class` CSS class)
 	 *
 	 * @param int|string $id The ID of the Element (numerical array ID from the config file) or route of a Element item
+	 * @param boolean $recursive Should parent items also be set active?
 	 * @return Element_Item|bool The active Element item or FALSE when item not found
 	 */
-	public function set_current($id = 0)
+	public function set_current($id = 0, $recursive=false)
 	{
 		$active_item = $this->get_item($id);
 
@@ -211,7 +213,8 @@ class Kohana_Element
 			return FALSE;
 		}
 
-		$active_item->add_class($this->_config['active_item_class']);
+		$active_item->set_active($this->_config['active_item_class'], $recursive);
+
 		return $active_item;
 	}
 
@@ -246,6 +249,7 @@ class Kohana_Element
 		if (array_key_exists($id, $this->_items)) { // By ID
 			return $this->_items[$id];
 		} else { // By route
+
 			$path = $this->get_tree_index(Request::current()->route());
 
 			if($path != false) {

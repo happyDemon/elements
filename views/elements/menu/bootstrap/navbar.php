@@ -18,14 +18,14 @@
 	// Is this a dropdown-menu with sibling links?
 	if ($item->has_siblings()):?>
 
-		<li class="dropdown  <?=$item->get_classes()?>" title="<?=$item->tooltip?>">
+		<li class="dropdown <?=$item->get_classes();?>" title="<?=$item->tooltip?>">
 			<a href="#"
 			   class="dropdown-toggle"
 			   data-toggle="dropdown"><?=$item->title?><b class="caret"></b>
 			</a>
 			<ul class="dropdown-menu">
 				<?foreach ($item->siblings as $subitem): ?>
-				<li>
+				<li class="<?=$subitem->get_classes();?>">
 					<?=(string) $subitem?>
 				</li>
 				<? endforeach?>
@@ -35,7 +35,7 @@
 		<? else:
 		// No, this is a "normal", single-level menu
 		?>
-		<li class="<?=$item->get_classes()?>">
+		<li class="<?=$item->get_classes();?>">
 			<?=(string) $item?>
 		</li>
 
