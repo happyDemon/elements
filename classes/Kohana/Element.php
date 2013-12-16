@@ -135,7 +135,7 @@ class Kohana_Element
 	{
 		// Try to guess the current active Element item
 		if ($this->_active_item_index === NULL) {
-			$this->set_current(Route::name(Request::$initial->route()), $active_recursive));
+			$this->set_current(Route::name(Request::$initial->route()), $active_recursive);
 		}
 
 		return Kohana_Element_Render::factory($driver, $this, $tpl)->render();
