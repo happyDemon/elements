@@ -129,14 +129,13 @@ class Kohana_Element
 	 * Render the Element into HTML
 	 *
 	 * @since 2.0
-	 * @param boolean $recursive Should parent items also be set active?
 	 * @return string the rendered view
 	 */
 	public function render($driver='Menu', $tpl=null, $active_recursive=false)
 	{
 		// Try to guess the current active Element item
 		if ($this->_active_item_index === NULL) {
-			$this->set_current(Route::name(Request::current()->route()), $active_recursive);
+			$this->set_current(Route::name(Request::$initial->route()), $active_recursive));
 		}
 
 		return Kohana_Element_Render::factory($driver, $this, $tpl)->render();
@@ -213,6 +212,7 @@ class Kohana_Element
 			return FALSE;
 		}
 
+		$this->_active_item_index = $this->routes[$id];
 		$active_item->set_active($this->_config['active_item_class'], $recursive);
 
 		return $active_item;
@@ -249,8 +249,7 @@ class Kohana_Element
 		if (array_key_exists($id, $this->_items)) { // By ID
 			return $this->_items[$id];
 		} else { // By route
-
-			$path = $this->get_tree_index(Request::current()->route());
+			$path = $this->get_tree_index(Route::get($id));
 
 			if($path != false) {
 				$levels = count($path);
@@ -263,7 +262,6 @@ class Kohana_Element
 						$item = $item->siblings[$path[$i]];
 					}
 				}
-
 				return $item;
 			}
 		}

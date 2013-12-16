@@ -13,7 +13,7 @@ class Kohana_Element_Item
 	/**
 	 * @var array Current item config
 	 */
-	protected  $_config = array();
+	protected $_config = array();
 
 	/**
 	 * @var Element Reference to the items parent element
@@ -23,7 +23,7 @@ class Kohana_Element_Item
 	/**
 	 * @var Element_item|null Parent item of this one
 	 */
-	protected $_parent_item = null;
+  protected $_parent_item = null;
 
 	/**
 	 * @param array $item_config Element item config
@@ -47,16 +47,28 @@ class Kohana_Element_Item
 			$this->_parent_item = $parent_item;
 		}
 
-		// Add icon to the title
-		if (! empty($this->_config['icon'])) {
-			$this->_config['title'] = $this->_render_icon().$this->_config['title'];
-		}
-
-		// Apply URL::site
+		// Apply URL::site @todo move to render
 		if(isset($this->_config['route'])) {
-			$route_params = (isset($this->_config['param'])) ? $this->_config['param'] : array();
-			$this->_config['url'] = URL::site(Route::get($this->_config['route'])->uri($route_params), true);
 			$this->_element->routes[$this->_config['route']] = $index;
+
+			$route_params = array();
+
+			if(isset($this->_config['param']))
+			{
+				foreach($this->_config['param'] as $param => $value)
+				{
+					if($value == null)
+					{
+						$route_params[$param] = Request::$initial->param($param);
+					}
+					else
+					{
+						$route_params[$param] = $value;
+					}
+				}
+			}
+
+			$this->_config['url'] = Route::url($this->_config['route'], $route_params, true);
 		}
 		else if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8)) {
 			$this->_config['url'] = URL::site($this->_cornfig['url']);
@@ -75,15 +87,16 @@ class Kohana_Element_Item
 	 */
 	public function __toString()
 	{
+		$title = $this->_render_icon() . $this->_config['title'];
 		if($this->last == true)
 		{
-			return $this->_config['title'];
+			return $title;
 		}
 		else
 		{
 			return HTML::anchor(
 				$this->_config['url'],
-				$this->_config['title'],
+				$title,
 				array(
 					'title' => $this->_config['tooltip']
 				),
@@ -109,13 +122,27 @@ class Kohana_Element_Item
 		return ($this->_config['url'] != '#');
 	}
 
-	public function set_active($class, $recursive=false) {
+
+	public function set_active($class, $recursive=false)
+	{
 		$this->add_class($class);
 
 		if($recursive == true && $this->_parent_item != null) {
 			$this->_parent_item->set_active($class, true);
 		}
 
+        return $this;
+	}
+
+	/**
+	 * Change the title
+	 *
+	 * @param string $title
+	 * @return Kohana_Element_Item
+	 */
+	public function set_title($title)
+	{
+		$this->_config['title'] = $title;
 		return $this;
 	}
 
@@ -186,7 +213,7 @@ class Kohana_Element_Item
 	 */
 	private function _render_icon()
 	{
-		return '<i class="'.$this->_config["icon"].'"></i> ';
+		return (!empty($this->_config["icon"])) ? '<i class="'.$this->_config["icon"].'"></i> ' : '';
 	}
 
 	/**

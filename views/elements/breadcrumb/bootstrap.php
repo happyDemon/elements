@@ -8,7 +8,7 @@
  * @copyright (c) 2013, happyDemon
  */
 ?>
-	<ul class="breadcrumb">
+	<ol class="breadcrumb">
 		<?foreach ($tree as $item):?>
 		<li class="<?=$item->get_classes()?>">
 			<? if($item->last == true && $element->last_item != null): ?>
@@ -16,9 +16,6 @@
 			<? else: ?>
 				<?=(string) $item?>
 			<? endif?>
-			<? if($item->last != true): ?>
-				<span class="divider">/</span>
-			<? endif?>
 		</li>
 		<? endforeach?>
-	</ul>
+	</ol>
