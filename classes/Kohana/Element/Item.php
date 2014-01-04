@@ -9,7 +9,6 @@
  */
 class Kohana_Element_Item
 {
-
 	/**
 	 * @var array Current item config
 	 */
@@ -43,39 +42,23 @@ class Kohana_Element_Item
 		$this->_config['tooltip'] = __($this->_config['tooltip']);
 
 		//set the parent item
-		if($parent_item != false) {
+		if($parent_item != false)
+		{
 			$this->_parent_item = $parent_item;
 		}
 
-		// Apply URL::site @todo move to render
-		if(isset($this->_config['route'])) {
+		// Register route, if provided
+		if(isset($this->_config['route']))
+		{
 			$this->_element->routes[$this->_config['route']] = $index;
 
-			$route_params = array();
-
-			if(isset($this->_config['param']))
-			{
-				foreach($this->_config['param'] as $param => $value)
-				{
-					if($value == null)
-					{
-						$route_params[$param] = Request::$initial->param($param);
-					}
-					else
-					{
-						$route_params[$param] = $value;
-					}
-				}
-			}
-
-			$this->_config['url'] = Route::url($this->_config['route'], $route_params, true);
-		}
-		else if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8)) {
-			$this->_config['url'] = URL::site($this->_cornfig['url']);
+			//register param values if provided
+			$this->_element->route_params[$this->_config['route']] = Arr::get($this->_config, 'route_param', []);
 		}
 
 		// Sub-Element
-		if (array_key_exists('items', $item_config) && count($item_config['items']) > 0) {
+		if (array_key_exists('items', $item_config) && count($item_config['items']) > 0)
+		{
 			foreach ($item_config['items'] as $key => $sibling) {
 				$this->_config['siblings'][$key] = new Element_Item($sibling, $element, $index.'.'.$key, $this);
 			}
@@ -83,17 +66,72 @@ class Kohana_Element_Item
 	}
 
 	/**
+	 * Set a route param for this element.
+	 *
+	 * @param string $name      Name of the route param
+	 * @param  string $value    Value for the route param
+	 * @return Kohana_Item
+	 * @throws Kohana_Exception If the given $name is not defined as a required param
+	 */
+	public function param($name, $value)
+	{
+		if(in_array($name, $this->_config['params']))
+		{
+			$this->_element->route_params[$this->_config['route']][$name] = $value;
+			return $this;
+		}
+
+		throw new Kohana_Exception('Param ":param" should not be set for route ":route"', array(':param' => $name, ':route' => $this->_config['route']));
+	}
+
+	/**
 	 * @return string HTML anchor
 	 */
-	public function __toString()
+	public function render()
 	{
 		$title = $this->_render_icon() . $this->_config['title'];
+
 		if($this->last == true)
 		{
 			return $title;
 		}
 		else
 		{
+			$is_current = (Route::name(Request::$initial->route()) == $this->_config['route']);
+			// Apply URL::site
+			if(isset($this->_config['route']))
+			{
+				$route_params = array();
+
+				if(isset($this->_config['param']) && count($this->_config['param'] > 0))
+				{
+					foreach($this->_config['param'] as $param)
+					{
+						if($this->_element->route_params[$this->_config['route']] == null)
+						{
+							if($is_current)
+							{
+								$route_params[$param] = Request::$initial->param($param);
+							}
+							else
+							{
+								throw new Kohana_Exception('Route parameters aren\'t set for ":route"', array(':route' => $this->_config['route']));
+							}
+						}
+						else
+						{
+							$route_params[$param] = $this->_element->route_params[$this->_config['route']][$param];
+						}
+					}
+				}
+
+				$this->_config['url'] = Route::url($this->_config['route'], $route_params, true);
+			}
+			else if (! 'http://' == substr($this->_config['url'], 0, 7)    AND ! 'https://' == substr($this->_config['url'], 0, 8))
+			{
+				$this->_config['url'] = URL::site($this->_cornfig['url']);
+			}
+
 			return HTML::anchor(
 				$this->_config['url'],
 				$title,
@@ -104,6 +142,11 @@ class Kohana_Element_Item
 				FALSE
 			);
 		}
+	}
+
+	public function __toString()
+	{
+		return $this->render();
 	}
 
 	/**
@@ -127,7 +170,8 @@ class Kohana_Element_Item
 	{
 		$this->add_class($class);
 
-		if($recursive == true && $this->_parent_item != null) {
+		if($recursive == true && $this->_parent_item != null)
+		{
 			$this->_parent_item->set_active($class, true);
 		}
 
@@ -154,7 +198,8 @@ class Kohana_Element_Item
 	 */
 	public function add_class($class)
 	{
-		if (! in_array($class, $this->_config['classes'])) {
+		if (! in_array($class, $this->_config['classes']))
+		{
 			$this->_config['classes'][] = $class;
 		}
 		return $this;
@@ -169,7 +214,8 @@ class Kohana_Element_Item
 	public function remove_class($class)
 	{
 		$key = array_search($class, $this->_config['classes']);
-		if ($key !== FALSE) {
+		if ($key !== FALSE)
+		{
 			unset($this->_config['classes'][$key]);
 		}
 		return $this;
@@ -194,7 +240,8 @@ class Kohana_Element_Item
 	 */
 	public function __get($name)
 	{
-		if (array_key_exists($name, $this->_config)) {
+		if (array_key_exists($name, $this->_config))
+		{
 			return $this->_config[$name];
 		}
 	}

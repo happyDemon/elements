@@ -43,6 +43,11 @@ class Kohana_Element
 	public $routes;
 
 	/**
+	 * @var array Contains params to bind to specific routes
+	 */
+	public $route_params = array();
+
+	/**
 	 * Initialize a new Element.
 	 * Use the factory method instead of the `new` keyword.
 	 *
@@ -134,7 +139,8 @@ class Kohana_Element
 	public function render($driver='Menu', $tpl=null, $active_recursive=false)
 	{
 		// Try to guess the current active Element item
-		if ($this->_active_item_index === NULL) {
+		if ($this->_active_item_index === NULL)
+		{
 			$this->set_current(Route::name(Request::$initial->route()), $active_recursive);
 		}
 
@@ -187,8 +193,10 @@ class Kohana_Element
 
 		$visible_items = [];
 
-		foreach ($this->_items as $key => $item) {
-			if (! $item->is_visible()) {
+		foreach ($this->_items as $key => $item)
+		{
+			if (! $item->is_visible())
+			{
 				continue;
 			}
 			$visible_items[$key] = $item;
@@ -208,9 +216,8 @@ class Kohana_Element
 	{
 		$active_item = $this->get_item($id);
 
-		if (! $active_item) {
+		if (! $active_item)
 			return FALSE;
-		}
 
 		$this->_active_item_index = $this->routes[$id];
 		$active_item->set_active($this->_config['active_item_class'], $recursive);
@@ -227,9 +234,9 @@ class Kohana_Element
 	 */
 	public function __get($name)
 	{
-		if (array_key_exists($name, $this->_config)) {
+		if (array_key_exists($name, $this->_config))
 			return $this->_config[$name];
-		}
+
 		return NULL;
 	}
 
@@ -242,21 +249,24 @@ class Kohana_Element
 	public function get_item($id)
 	{
 		// Element empty!
-		if (count($this->_items) === 0) {
+		if (count($this->_items) === 0)
 			return FALSE;
-		}
 
-		if (array_key_exists($id, $this->_items)) { // By ID
+		if (array_key_exists($id, $this->_items))
+		{ // By ID
 			return $this->_items[$id];
-		} else { // By route
+		} else
+		{ // By route
 			$path = $this->get_tree_index(Route::get($id));
 
-			if($path != false) {
+			if($path != false)
+			{
 				$levels = count($path);
 
 				$item = $this->_items[$path[0]];
 
-				if($levels > 1) {
+				if($levels > 1)
+				{
 					for($i=1; $i<$levels; $i++)
 					{
 						$item = $item->siblings[$path[$i]];
@@ -278,9 +288,9 @@ class Kohana_Element
 	{
 		$name = Route::name($route);
 
-		if(isset($this->routes[$name])) {
+		if(isset($this->routes[$name]))
 			return explode('.', $this->routes[$name]);
-		}
+
 		return false;
 	}
 
