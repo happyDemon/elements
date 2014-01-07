@@ -244,7 +244,7 @@ class Kohana_Element
 	 * Get an instance of Element_Item based on its ID
 	 *
 	 * @param int|string $id Item ID or route name
-	 * @return bool|Element_Item
+	 * @return Element_Item
 	 */
 	public function get_item($id)
 	{

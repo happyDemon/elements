@@ -75,7 +75,7 @@ class Kohana_Element_Item
 	 */
 	public function param($name, $value)
 	{
-		if(in_array($name, $this->_config['params']))
+		if(in_array($name, $this->_config['param']))
 		{
 			$this->_element->route_params[$this->_config['route']][$name] = $value;
 			return $this;
