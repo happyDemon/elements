@@ -75,7 +75,7 @@ class Kohana_Element_Item
 	 */
 	public function param($name, $value)
 	{
-		if(in_array($name, $this->_config['param']))
+		if(in_array($name, $this->_config['route_param']))
 		{
 			$this->_element->route_params[$this->_config['route']][$name] = $value;
 			return $this;
@@ -87,7 +87,7 @@ class Kohana_Element_Item
 	/**
 	 * @return string HTML anchor
 	 */
-	public function render()
+	public function render($include_classes = false)
 	{
 		$title = $this->_render_icon() . $this->_config['title'];
 
@@ -103,9 +103,9 @@ class Kohana_Element_Item
 			{
 				$route_params = array();
 
-				if(isset($this->_config['param']) && count($this->_config['param'] > 0))
+				if(isset($this->_config['route_param']) && count($this->_config['route_param'] > 0))
 				{
-					foreach($this->_config['param'] as $param)
+					foreach($this->_config['route_param'] as $param)
 					{
 						if($this->_element->route_params[$this->_config['route']] == null)
 						{
@@ -132,12 +132,18 @@ class Kohana_Element_Item
 				$this->_config['url'] = URL::site($this->_cornfig['url']);
 			}
 
+			$attr = [
+				'title' => $this->_config['tooltip']
+			];
+
+			if($include_classes == true)
+			{
+				$attr['class'] = implode(' ', $this->_config['classes']);
+			}
 			return HTML::anchor(
 				$this->_config['url'],
 				$title,
-				array(
-					'title' => $this->_config['tooltip']
-				),
+				$attr,
 				NULL,
 				FALSE
 			);
@@ -168,6 +174,9 @@ class Kohana_Element_Item
 
 	public function set_active($class, $recursive=false)
 	{
+		$this->_config['active'] = true;
+		$this->_config['active_class'] = $class;
+
 		$this->add_class($class);
 
 		if($recursive == true && $this->_parent_item != null)
@@ -175,7 +184,21 @@ class Kohana_Element_Item
 			$this->_parent_item->set_active($class, true);
 		}
 
-        return $this;
+		return $this;
+	}
+
+	public function set_inactive($recursive=false)
+	{
+		$this->_config['active'] = false;
+
+		$this->remove_class($this->_config['active_class']);
+
+		if($recursive == true && $this->_parent_item != null)
+		{
+			$this->_parent_item->set_inactive(true);
+		}
+
+		return $this;
 	}
 
 	/**
@@ -275,7 +298,8 @@ class Kohana_Element_Item
 			'title'    => NULL, // Visible text
 			'tooltip'  => NULL, // Tooltip text for this Element item
 			'url'      => '#', // Relative or absolute target for this Element item (href)
-			'visible'  => TRUE
+			'visible'  => TRUE,
+			'active'   => FALSE
 		];
 	}
 
