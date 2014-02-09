@@ -154,3 +154,5 @@ The code is mostly commented, a user guide is on it's way with more examples.
 
 The Kohana module started out as a fork of [Anroot](https://github.com/anroots/kohana-menu)'s Kohana-menu, which in turn is a fork of the original Kohana Menu module by
 [Bastian Bräu](http://github.com/b263/kohana-menu), but is now independently developed under the MIT licence.
+
+[![Gittip Badge](http://img.shields.io/gittip/happyDemon.svg)](https://www.gittip.com/happyDemon/ "Gittip donations")
